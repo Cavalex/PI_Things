@@ -140,13 +140,37 @@ Palavras acrescentaFim(Palavras l, char *p){
 }
 
 //7
-Palavras acrescenta(Palavras l, char* p){
-    return NULL;
+// mais facil de forma recursiva
+Palavras acrescenta (Palavras l, char *p){
+    //o l é nulo entao so queremos acrescentar a celula nova
+    //testamos se a primeira é menor que a segunda
+    if(!l || (strcmp(p,l->palavra) < 0)){
+        return acrescentaInicio(l,p);
+    }
+    else if ((strcmp(p,l->palavra) == 0)){
+        l->ocorr++;
+        return l;
+    }
+    else{
+        l->prox = acrescenta(l->prox,p);
+        return l;
+    }
+
 }
 
 //8
-struct celula * maisFreq(Palavras l){
-    int a;
+Palavras maisFreq (Palavras l){
+    Palavras res;
+    int max = 0; //automaticamente menor que todas as freqs (que começam a 1);
+    
+    while (l){
+        if(l->ocorr > max){
+            res = l;
+            max = l->ocorr;
+        }
+        l = l->prox;
+    }
+    return res;
 }
 
 int main(){
