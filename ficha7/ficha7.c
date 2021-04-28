@@ -121,6 +121,7 @@ Palavras acrescentaFim(Palavras l, char *p){
     aux->prox = acrescentaInicio(NULL, p);
     return l;
 
+    // nao funciona :(
     // Palavras r = l;
     // Palavras nova = malloc(sizeof(struct celula));
     // if (nova == NULL) return NULL;
@@ -136,6 +137,16 @@ Palavras acrescentaFim(Palavras l, char *p){
     //     l = l->prox;
     // }
     // return r;
+}
+
+//7
+Palavras acrescenta(Palavras l, char* p){
+    return NULL;
+}
+
+//8
+struct celula * maisFreq(Palavras l){
+    int a;
 }
 
 int main(){
