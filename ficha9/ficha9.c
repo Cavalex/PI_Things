@@ -1,14 +1,13 @@
 #include <stdio.h>
 
-//#define max(x,y) 
+#define MAX(a,b) (a>b) ? a : b
 
 // Árvores binárias
 
-struct nodo{
+typedef struct nodo {
     int valor;
-    struct nodo *l;
-    struct nodo *r;
-} typedef *ABin;
+    struct nodo *l, *r;
+} * ABin;
 
 int maxBT(int a, int b){
     if(a > b) return a;
