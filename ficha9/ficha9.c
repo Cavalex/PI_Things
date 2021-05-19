@@ -18,30 +18,35 @@ int maxBT(int a, int b){
 // se temos que percorrer ambos os lados -> função recursiva
 // se temos que percorrer só um lado -> função iterativa
 
+//a
 int altura(ABin a){
     if (!a) return 0; // caso base
     // função max entre os 2 nodos,
     return maxBT(1 + altura(a->l), 1 + altura(a->r));
 }
 
+//b
 int nFolhas(ABin a){
     if (!a) return 0;
     if (!a->l && !a->r) return 1;
     return nFolhas(a->l) + nFolhas(a->r);
 }
 
+//c
 int maisEsquerda(ABin a){
     if (!a) return NULL;
     while(a->l) a = a->l;
     return a;
 }
 
+//c2
 int maisEsquerdaRecursive(ABin a){
     //if (!a) return NULL; // ou return a, que a é NULL
     if (!a->l || !a) return a;
     return maisEsquerda(a->l);
 }
 
+//d
 void imprimeNivel(ABin a, int l){
     if(a){
         if(!l) printf("%d\n", a->valor); // !l == (l == 0)
@@ -52,11 +57,14 @@ void imprimeNivel(ABin a, int l){
     }
 }
 
+//e
 int procuraE(ABin a, int x){
     // função linda~
     return (a && ((a->valor == x) || (procuraE(a->l, x)) || (procuraE(a->r, x))));
 }
 
+//2
+//f
 struct nodo *procura(ABin a, int x){
     while(a && x != a->valor){
         if(x > a->valor) a = a->r;
@@ -65,6 +73,7 @@ struct nodo *procura(ABin a, int x){
     return a;
 }
 
+//g
 int nivel(ABin a, int x){
     int n = 0;
     while(a && x != a->valor){
@@ -77,17 +86,7 @@ int nivel(ABin a, int x){
     return n;
 }
 
-// minha versão, está muito provavelmente mal
-void imprimeAte2(ABin a, int x){
-    if(a){
-        if(a->valor != x) printf("%d\n", a->valor);
-        else{
-            imprimeAte2(a->l, x);
-            imprimeAte2(a->l, x);
-        }
-    }
-}
-
+//h
 void imprimeAte(ABin a, int x){
     if(a){
         imprimeAte(a->l, x);
