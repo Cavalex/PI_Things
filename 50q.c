@@ -109,26 +109,21 @@ int mystrcmp(char s1[], char s2[]){
 
 //TODO
 //10
-char* mystrstr (char haystack[], char needle[]) {
-    int isContained = 1;
-    char* ans = haystack;
-    char* needleStart = needle;
-    while(*needle && *haystack) {
-        if(*haystack != *needle) {
-            isContained = 0;
-            needle = needleStart;
-        }
-        if(*haystack == *needle) {
-            if(!isContained) {
-                isContained = 1;
-                ans = haystack;
-            }
-            needle++;
-        }
-        haystack++;
+// versão do toldy, mais curta e mais facil de perceber
+char* mystrstr (char s1[], char s2[]) {
+    char *ret = NULL;
+    int i, j, l;
+    
+    if (!(*s2))
+        ret = s1;
+
+    for (i = 0; s1[i] && !ret; i++) {
+        for (j = 0, l = i; s1[l] == s2[j] && s2[j]; l++, j++);
+        if (!s2[j])
+            ret = s1 + i;
     }
-    if (isContained && !(*needle)) return ans;
-    else return NULL;
+  
+    return ret;
 }
 
 //11
@@ -330,10 +325,173 @@ int contaPal(char s[]){
     return c;
 }
 
+//21
+int contaVogais(char s[]){
+    int count = 0;
+    while(*s){
+        if(*s == 'A' || *s == 'E' || *s == 'I' || *s == 'O' || *s == 'U' || *s == 'a' || *s == 'e' || *s == 'i' || *s == 'o' || *s == 'u') count++;
+        s++;
+    }
+    return count;
+}
+
+//22
+//TODO
+int contida(char a[], char b[]){
+    char c;
+    int pertence = 0;
+    int contida = 1;
+    int i;
+    while(*a){
+        c = *a;
+        pertence = 0;
+        for(i = 0; b[i]; i++){
+            if(*a == b[i]) pertence = 1;
+        }
+        if(!pertence) {contida = pertence; break;}
+        a++;
+    }
+    return contida;
+}
+
+//23
+int palindrome(char s[]){
+    int i, len;
+    for(len = 0; s[len]; len++);
+    for(i = 0; s[i]; i++){
+        if(!(s[i] == s[len - i - 1])) return 0;
+    }
+    return 1;
+}
+
+//24
+int remRep(char x[]){
+    int i = 1, len;
+    while(x[i]){
+        if(x[i-1] == x[i]) tail(x+i);
+        else i++;
+    }
+
+    for(len = 0; x[len]; len++);
+    return len;
+}
+
+//25
+int limpaEspacos(char t[]){
+    int i = 1, len;
+    while(t[i]){
+        if(t[i-1] == t[i] && t[i] == ' ') tail(t + i);
+        else i++;
+    }
+
+    //printf("t -> %s\n", t);
+    for(len = 0; t[len]; len++);
+    return len;
+}
+
+//26
+void insere(int v[], int N, int x){
+    int i, j;
+    for(i = 0; i < N; i++){
+        if(x < v[i]){
+            for(j = N; j > i; j--){
+                v[j] = v[j-1];
+            }
+            v[i] = x;
+            break; // queremos inserir só uma vez, por isso temos de sair xD
+        }
+        // acho que isto não é necessário
+        //if(i == N - 1) {
+        //    v[N] = x;
+        //}
+    }
+}
+
+//27
+void merge(int r[], int a[], int b[], int na, int nb){
+    int ia, ib, ir;
+    ia = ib = ir = 0;
+    
+    while(ia < na && ib < nb)
+        if(a[ia] < b[ib]) r[ir++] = a[ia++];
+        else r[ir++] = b[ib++];
+    while(ia < na) r[ir++] = a[ia++];
+    while(ib < nb) r[ir++] = b[ib++];
+}
+
+//28
+int crescente(int a[], int i, int j){
+    int k;
+    for(k = i + 1; k < j; k++){
+        if(!(a[k-1] <= a[k])) return 0;
+    }
+    return 1;
+}
+
+//29
+int retiraNeg(int v[], int N){
+    int i = 0, len;
+    while(i < N){
+        if(v[i] < 0){
+            // o equivalente da tail, mas para ints:
+            int j;
+            for(j = i; j < N - 1; j++) v[j] = v[j+1]; // j < N - 1 pq vamos diminuir o array em 1
+            N--; // o array diminui em 1
+        }
+        else i++;
+    }
+    return N;
+}
+
+//30
+int menosFreq(int v[], int N){
+    int menor = v[0];
+    int menosAparicoes = __INT_MAX__ ;
+    int i, j, n, aparicoes = 0;
+    for(i = 0; i < N; i++){
+        aparicoes = 0;
+        n = v[i];
+        for(j = 0; j < N; j++){
+            if(v[j] == n) aparicoes++;
+        }
+        if(aparicoes < menosAparicoes){
+            menor = n;
+            menosAparicoes = aparicoes;
+        }
+        //printf("n->%d, aparicoes->%d, menosApar->%d, menor->%d\n", n, aparicoes, menosAparicoes, menor);
+    }
+    return menor;
+}
+
+//31
+int maisFreq(int v[], int N){
+    int maior = v[0];
+    int aparicoes = 0;
+    int maisAparicoes = -1;
+    int i, j, n;
+    for(i = 0; i < N; i++){
+        aparicoes = 0;
+        n = v[i];
+        for(j = 0; j < N; j++){
+            if(n == v[j]) aparicoes++;
+        }
+        if(aparicoes > maisAparicoes){
+            maisAparicoes = aparicoes;
+            maior = n;
+        }
+    }
+    return maior;
+}
+
+//32
+int maxCresc(int v[], int N){
+    
+}
+
 int main(){
     int n = 440;
     char s1[] = "mundo cruel!!!";
-    char s2[] = "fgh22ij";
+    char s2[] = "ababa";
 
     //average();
     //biggest2();
@@ -345,7 +503,8 @@ int main(){
 
 
     //printf("%c != %c count -> %d\n", *s2, c, count);
-    printf("difCon-> %d", difConsecutivos(s1));
+    //printf("difCon -> %d", difConsecutivos(s1));
+    printf("pal -> %d", palindrome(s2));
 
     return 0;
 }
