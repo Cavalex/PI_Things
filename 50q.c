@@ -548,6 +548,49 @@ comunsOrd(int a[], int na, int b[], int nb){
     return comuns;
 }
 
+//36
+//TODO
+int comuns(int a[], int na, int b[], int nb){
+    int i, j, pertence = 0, comuns = 0;
+    for(i = 0; i < na; i++){
+        pertence = 0; 
+        for(j = 0; j < nb; j++){
+            if(a[i] == b[j]) pertence = 1;
+        }
+        comuns += pertence;
+    }
+    return comuns;
+}
+
+//37
+int minInd(int v[], int N){
+    int menor = v[0], n, i, ind = 0;
+    for(i = 0; i < N; i++){
+        n = v[i];
+        if(v[i] < menor){
+            menor = v[i];
+            ind = i;
+        }
+    }
+    return ind;
+}
+
+//38
+void somasAc(int v[], int Ac[], int N){
+    int i, j, soma;
+    for(i = 0; i < N; i++){
+        soma = 0;
+        for(j = 0; j <= i; j++){
+            soma += v[j];
+        }
+        Ac[i] = soma;
+    }
+}
+
+//39
+
+
+
 int main(){
     int n = 440;
     char s1[] = "mundo cruel!!!";
