@@ -485,7 +485,67 @@ int maisFreq(int v[], int N){
 
 //32
 int maxCresc(int v[], int N){
-    
+    int i;
+    int n = 1;
+    int b = 0;
+    for(i = 1; i < N; i++){
+        if(v[i-1] <= v[i]){
+            n++;
+            //printf("%d: %d <= %d, n -> %d, b -> %d\n", i, v[i-1], v[i], n, b);
+        }
+        else{
+            //printf("%d: %d > %d, n->%d \n",i, v[i-1], v[i], n);
+            n = 1;
+        }
+        if(n > b) b = n;
+    }
+    return b;
+}
+
+//33
+int elimRep(int v[], int N){
+    int i, j, r;
+    for(i = 0; i < N; i++){
+        j = i + 1; // para nao se eliminar a si proprio
+        while(j < N){
+            if(v[i] == v[j]){
+                for(r = j; r < N-1; r++) v[r] = v[r+1];
+                N--;
+            }
+            else j++;
+        }
+    }
+    return N;
+}
+
+//34
+int elimRepOrd(int v[], int n){
+    int i = 1, j;
+    while(i < n){
+        if(v[i-1] == v[i]){
+            for(j = i; j < n-1; j++) v[j] = v[j+1];
+            n--;
+        }
+        else i++;
+    }
+    return n;
+}
+
+//35
+//TODO
+comunsOrd(int a[], int na, int b[], int nb){
+    int i = 0, j = 0, comuns = 0; 
+    while(i < na && j < nb){
+        if(a[i] == b[j]){
+            comuns++;
+            i++;
+            j++;
+        }
+        else if(a[i] > b[j]) j++;
+        else i++;
+
+    }
+    return comuns;
 }
 
 int main(){
