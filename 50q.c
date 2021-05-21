@@ -588,8 +588,129 @@ void somasAc(int v[], int Ac[], int N){
 }
 
 //39
+// matriz triangular superior, 
+// todos os elementos abaixo da diagonal são zeros
+int triSup(int N, float m [N][N]){
+    int i, j, res = 1;
+    for(i = 0; i < N; i++){
+        for(j = 0; j < i; j++){
+            if(m[i][j]) res = 0;
+        }
+    }
+    return res;
+}
 
+//40
+//TODO
+// matriz transposta:
+// se for 2x3, passa para 3x2 e os elementos "refletem-se" pela diagonal 
+void transposta (int N, float m[N][N]) {
+    int i,j, temp;
+    for (i = 0; i<N;i++){
+        for ( j = 0; j <i;j++){
+            float temp = m [i][j];
+            m [i][j] = m [j][i];
+            m [j][i] = temp; 
+        }
+    } 
+}
 
+//41
+// soma de matrizes
+void addTo(int N, int M, int a[N][M], int b[N][M]){
+    int i, j;
+    for(i = 0; i < N; i++) {
+        for(j = 0; j < M; j++) {
+            a[i][j] += b[i][j];
+            // ou:
+            // *(*(a + i)+j) += b[i][j];
+        }
+    }
+}
+
+//42
+int unionSet(int N, int v1[N], int v2[N], int r[N]){
+    int i, len = 0;
+    for(i = 0; i < N; i++){
+        r[i] = v1[i] || v2[i];
+        len += r[i];
+    }
+    return len;
+}
+
+//43
+int intersectSet(int N, int v1[N], int v2[N], int r[N]){
+    int i, len = 0;
+    for(i = 0; i < N; i++){
+        r[i] = v1[i] && v2[i];
+        len += r[i];
+    }
+    return len;
+}
+
+//44
+int intersectMSet(int N, int v1[N], int v2[N], int r[N]){
+    int i, len = 0;
+    for(i = 0; i < N; i++){
+        r[i] = v1[i] < v2[i] ? v1[i] : v2[i]; // fica o menor I guess
+        len += r[i];
+    }
+    return len;
+}
+
+//45
+int unionMSet(int N, int v1[N], int v2[N], int r[N]){
+    int i, len = 0;
+    for(i = 0; i < N; i++){
+        r[i] = v1[i] > v2[i] ? v1[i] : v2[i]; // fica o maior
+        len += r[i];
+    }
+    return len;
+}
+
+//46
+int cardinalMSet(int N, int v[N]){
+    int i, len = 0;
+    for(i = 0; i < N; i++) len += v[i];
+    return len;
+}
+
+//47
+typedef enum movimento {Norte, Oeste, Sul, Este} Movimento;
+
+typedef struct posicao {
+    int x, y;
+} Posicao;
+
+Posicao posFinal(Posicao inicial, Movimento mov[], int N){
+    int i;
+    for(i = 0; i < N; i++){
+        Movimento m = mov[i];
+        if(m == Norte) inicial.y += 1;
+        if(m == Sul) inicial.y -= 1;
+        if(m == Oeste) inicial.x -= 1;
+        if(m == Este) inicial.x += 1;
+    }
+
+    return inicial;
+}
+
+//48
+//TODO
+int caminho(Posicao inicial, Posicao final, Movimento mov[], int N){
+    int i, moved;
+    for(i = 0; i < N; i++){
+        moved = 0;
+        if(inicial.x < final.x && !moved) {mov[i] = Este; inicial.x++; moved = 1;}
+        if(inicial.x > final.x && !moved) {mov[i] = Oeste; inicial.x--; moved = 1;}
+        if(inicial.y < final.y && !moved) {mov[i] = Norte; inicial.y++; moved = 1;}
+        if(inicial.y > final.y && !moved) {mov[i] = Sul; inicial.y--; moved = 1;}
+    }
+
+    printf("i:%d | finx->%d  inx->%d; finy->%d  iny->%d\n", i, final.x, inicial.x, final.y, inicial.y);
+    if(final.x != inicial.x || final.y != inicial.y) return -1;
+    return i;
+}
 
 int main(){
     int n = 440;
