@@ -701,15 +701,39 @@ int caminho(Posicao inicial, Posicao final, Movimento mov[], int N){
     int i, moved;
     for(i = 0; i < N; i++){
         moved = 0;
-        if(inicial.x < final.x && !moved) {mov[i] = Este; inicial.x++; moved = 1;}
-        if(inicial.x > final.x && !moved) {mov[i] = Oeste; inicial.x--; moved = 1;}
-        if(inicial.y < final.y && !moved) {mov[i] = Norte; inicial.y++; moved = 1;}
-        if(inicial.y > final.y && !moved) {mov[i] = Sul; inicial.y--; moved = 1;}
+        if(inicial.x < final.x && !moved) {mov[i] = Este; inicial.x++; moved = 1; printf("i = %d, x++\n", i);}
+        if(inicial.x > final.x && !moved) {mov[i] = Oeste; inicial.x--; moved = 1; printf("i = %d, x--\n", i);}
+        if(inicial.y < final.y && !moved) {mov[i] = Norte; inicial.y++; moved = 1; printf("i = %d, y++\n", i);}
+        if(inicial.y > final.y && !moved) {mov[i] = Sul; inicial.y--; moved = 1; printf("i = %d, y--\n", i);}
+        if(!moved) break; // EU NAO ACREDITO QUE O PROBLEMA FOI ESTE i RETARDADO
+        //printf("i:%d | (x:%d y:%d),  (x:%d y:%d)\n", i, inicial.x, inicial.y, final.x, final.y);
     }
 
-    printf("i:%d | finx->%d  inx->%d; finy->%d  iny->%d\n", i, final.x, inicial.x, final.y, inicial.y);
+    //printf("i:%d | (x:%d y:%d),  (x:%d y:%d)\n", i, inicial.x, inicial.y, final.x, final.y);
+    //printf("\n");
     if(final.x != inicial.x || final.y != inicial.y) return -1;
     return i;
+}
+
+//49
+//TODO
+int dist(int x, int y, int x0, int y0) {return abs(x - x0) + abs(y - y0);}
+
+int maisCentral(Posicao pos[], int N){
+    int i, menor = 0;
+    for(i = 0; i < N; i++){
+        if(dist(pos[i].x, pos[i].y, 0, 0) < dist(pos[menor].x, pos[menor].y, 0, 0)) menor = i;
+    }
+    return menor;
+}
+
+//50
+int vizinhos(Posicao p, Posicao pos[], int N){
+    int i, vizinhos = 0;
+    for(i = 0; i < N; i++){
+        if(dist(p.x, p.y, pos[i].x, pos[i].y) == 1) vizinhos++;
+    }
+    return vizinhos;
 }
 
 int main(){
