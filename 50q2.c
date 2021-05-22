@@ -325,6 +325,121 @@ int drop(int n, LInt* l){
     return n;
 }
 
+//21
+LInt NForward(LInt l, int N){
+    while(N > 0){
+        N--;
+        l = l->prox;
+    }
+    return l;
+}
+
+//22
+int listToArray (LInt l, int v[], int N){
+    int i = 0;
+    while(l && i < N){
+        v[i] = l->valor;
+        i++;
+        l = l->prox;
+    }
+    return i;
+}
+
+//23
+LInt arrayToList (int v[], int N){
+    if(N == 0) return NULL;
+    LInt l = malloc(sizeof(struct lligada));
+    l->valor = *v;
+    l->prox = arrayToList(v+1, N-1); // NUNCA PASSAR V++ OU N-- COMO ARGUMENTOS!
+    return l;
+}
+
+//24
+//TODO
+LInt somasAcL (LInt l) {
+    int sum = 0;
+    LInt list = NULL, temp = NULL;
+    for(;l; l = l->prox) {
+        sum += l->valor;
+        LInt new = malloc(sizeof(struct lligada));
+        new->valor = sum;
+        new->prox = NULL;
+        // na 1ª iteraçao metemos o list como cabeça da lista
+        // e inicializamos o 1º temp com o primeiro valor da lista
+        if(!list){
+            list = new;
+            temp = new;
+        }
+        // depois passamos pelo temp->prox sucessivamente
+        // dando-lhe a lista com o valor acumulado em new
+        else{
+            temp->prox = new;
+            temp = temp->prox;
+        }
+    }
+    return list;
+}
+
+//25
+//TODO
+void remreps (LInt l){
+    while(l) {
+        LInt* c = &(l->prox); // aponta para o proximo nodo
+
+        // percorre todos os nodos seguintes enquanto 
+        // eles tiverem o mesmo valor que o nodo original, l
+        while (*c && (*c)->valor == l->valor){
+            LInt temp = *c;
+            *c = (*c)->prox;
+            free(temp);
+        }
+        l = l->prox;
+    }
+}
+
+//26
+//TODO
+LInt rotateL (LInt l) {
+    if(!l || !(l->prox)) return l;
+    LInt temp = l; // só para percorrer a lista mesmo
+    LInt list = l->prox; // guardamos a cabeça da lista a retornar
+    while(temp->prox) temp = temp->prox; // ir até ao final da lista
+    // agora que estamos no ultimo nodo, 
+    // dizemos que o proximo valor aponta para o inicio da lista
+    temp->prox = l;
+    l->prox = NULL; // ou (temp->prox)->prox = NULL;
+    return list;
+}
+
+//27
+//TODO
+LInt parte (LInt l){
+    LInt cabecaP, *pares = &cabecaP, *impares = &l;
+    int i;
+    for(i = 1; *impares; i++){
+        if(i % 2){ // impar
+            // vamos andar com o pointer
+            // pq é mais facil eliminar elementos do array assim
+            impares = &(*impares)->prox;
+        }
+        else{ // par
+            // copiamos o elemento atual para o "pares"
+            // e passamos o pares para o proximo nodo
+            *pares = *impares;
+            pares = &(*pares)->prox;
+
+            // passamos o elemento atual à frente
+            *impares = (*impares)->prox;
+        }
+    }
+    // necessário pq ao copiarmos o *impares para o *pares
+    // copiamos tbm o (*pares)->prox, que contem o proximo 
+    // elemento do impares, assim terminamos a lista
+    // só com elementos pares.
+    *pares = NULL;
+    return cabecaP;
+}
+
 int main(){
     int n = 440;
     char s1[] = "mundo cruel!!!";
