@@ -440,6 +440,40 @@ LInt parte (LInt l){
     return cabecaP;
 }
 
+//28
+typedef struct nodo{
+    int valor;
+    struct nodo *esq, *dir;
+} *ABin;
+
+#define MAX(a,b) (a>b) ? a : b
+
+int altura(ABin a){
+    if(!a) return 0;
+    return MAX(1 + altura(a->esq), 1 + altura(a->dir));
+}
+
+//29
+ABin cloneAB(ABin a){
+    if(!a) return NULL;
+    ABin clone = malloc(sizeof(struct nodo));
+    clone->valor = a->valor;
+    clone->esq = cloneAB(a->esq);
+    clone->dir = cloneAB(a->dir);
+    return clone;
+}
+
+//30
+void mirror(ABin *a){
+    if(*a){
+        ABin temp = (*a)->esq;
+        (*a)->esq = (*a)->dir;
+        (*a)->dir = temp;
+        mirror(&((*a)->esq));
+        mirror(&((*a)->dir));
+    }
+}
+
 int main(){
     int n = 440;
     char s1[] = "mundo cruel!!!";
