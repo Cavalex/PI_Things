@@ -163,17 +163,167 @@ int removeAll(LInt* l, int n){
 }
 
 //11
-int removeDups(LInt* l){
-    int n;
+int removeDups(LInt *l){
+    int rem = 0;
     while(*l){
-        n = (*l)->valor;
-        if((*l)->valor == l){
-            LInt t = *l;
-            while()
+        LInt aux = (*l), next = (*l)->prox;
+        while(next){
+            if(next->valor == (*l)->valor){
+                aux->prox = next->prox;
+                rem++;
+                free(next);
+            }
+            else aux = next;
+            next = aux->prox;
         }
+        l = &(*l)->prox;
     }
+    return rem;
 }
 
+//12
+int removeMaiorL(LInt* l){
+    int maior = (*l)->valor;
+    LInt inicio = l;
+    // primeiro procuramos pelo maior elemento
+    while(*l){
+        if((*l)->valor > maior) maior = (*l)->valor;
+        l = &(*l)->prox;
+    }
+
+    l = inicio;
+    while(*l){
+        if((*l)->valor == maior){
+            printf("valor atual: %d\n", (*l)->valor);
+            LInt t = *l;
+            (*l) = (*l)->prox;
+            free(t);
+            break;
+        }
+        else{
+            l = &(*l)->prox;
+        }
+    }
+
+    return maior;
+}
+
+//13
+void init(LInt* l){
+    while((*l)->prox) l = &(*l)->prox;
+    *l = NULL;
+}
+
+//14
+void appendL(LInt* l, int n){
+    while(*l) l = &(*l)->prox;
+    (*l) = malloc(sizeof(struct lligada)); // NÃO ESQUECER DO MALLOC
+    (*l)->valor = n;
+    (*l)->prox = NULL;
+}
+
+//15
+void concatL(LInt* a, LInt b){
+    while(*a) a = &(*a)->prox;
+    (*a) = b;
+}
+
+//16
+// Provavelmente está mal, visto que não
+// tenho como testá-la...
+LInt cloneL(LInt l){
+    LInt new = malloc(sizeof(struct lligada));
+    new = l;
+    return new;
+}
+
+//17
+
+// LInt cloneRev(LInt l){
+//     LInt rev = malloc(sizeof(struct lligada));
+//     LInt inicio = rev; // É PRECISO ESTA BOSTA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//     int i = 0, len = length(l);
+//     if(len == 0) return NULL;
+//     int valores[len];
+//     while(i < len){
+//         valores[i] = l->valor;
+//         l = l->prox;
+//         i++;
+//     }
+//     i = len - 1;
+//     printf("Valor de i no meio: %d\n", i);
+//     while(i >= 0){
+//         rev->valor = valores[i];
+//         printf("rev->valor: %d\n", rev->valor);
+//         rev->prox = malloc(sizeof(struct lligada));
+//         rev = rev->prox;
+//         i--;
+//     }
+//     for(i = 0; i < len; i++) printf("valores[%d] = %d\n", i, valores[i]);
+//     rev = NULL;
+//     printf("len inicio:%d\n", length(inicio));
+//     return inicio; // ATENÇAO PQ SE PASSARMOS REV ISTO DÁ UM ERRO ESTUPIDO
+// }
+
+//TODO
+LInt cloneRev2 (LInt l) {
+    LInt list = NULL;
+    while(l) {
+        LInt new = malloc(sizeof(struct lligada));
+        new->valor = l->valor;
+        new->prox = list;
+        list = new;
+        l = l->prox;
+    }
+    return list;
+}
+
+//18
+int maximo(LInt l){
+    int max = l->valor;
+    while(l){
+        if(l->valor > max) max = l->valor;
+        l = l->prox;
+    }
+    return max;
+}
+
+//19
+int take(int n, LInt* l){
+    int i = 0;
+    // percorremos todos os nodos até o n
+    while((*l) && i < n){
+        l = &(*l)->prox;
+        i++;
+    }
+    // retornar quantos valores mudamos
+    if(!(*l)) return i;
+    // limpar todos os nodos à frente:
+    while(*l){
+        // tirado do freeL, a ideia é a mesma
+        //aux = l->prox;
+        //free(l);
+        //l = aux;
+
+        LInt temp = (*l)->prox;
+        free(*l);
+        *l = temp;
+    }
+    return n;
+}
+
+//20
+int drop(int n, LInt* l){
+    int i = 0;
+    while((*l) && i < n){
+        LInt temp = (*l)->prox;
+        free(*l);
+        *l = temp;
+        i++;
+    }
+    if(!(*l)) return i;
+    return n;
+}
 
 int main(){
     int n = 440;
