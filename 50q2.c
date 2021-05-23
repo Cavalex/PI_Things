@@ -447,6 +447,7 @@ typedef struct nodo{
 } *ABin;
 
 #define MAX(a,b) (a>b) ? a : b
+#define MIN(a,b) (a<b) ? a : b
 
 int altura(ABin a){
     if(!a) return 0;
@@ -473,6 +474,153 @@ void mirror(ABin *a){
         mirror(&((*a)->dir));
     }
 }
+
+//31
+//TODO a estas 3
+
+//inorder -> Esquerda, Nodo, Direita (nodo no meio, in)
+//preorder -> Nodo, Esquerda, Direita (nodo à esquerda, pre)
+//posorder -> Esquerda, Direita, nodo (nodo à direita, pos)
+
+//A cada chamada da recursiva, é chamada a função para o lado esquerdo
+//depois disso, um ciclo while percorre a lista até ao ponto depois de todas
+//as inserções à esquerda. É alocada memória para armazenar o valor do nodo atual
+//é chamada a função para o lado direito da lista
+void inorder(ABin a, LInt *l){
+    if (a){
+        inorder(a->esq, l);
+        while (*l) l = &(*l)->prox;
+        *l = malloc(sizeof(struct nodo));
+        (*l)->valor = a->valor;
+        inorder(a->dir,&(*l)->prox);
+    }
+    else *l = NULL;
+}
+
+//32
+//aloca memória para guardar o nodo atual na lista ligada, chama a preorder para o ramo esquerdo
+//avança o apontador da lista ligada para ajustar depois da execução do lado esquerdo
+//executa o lado direito
+void preorder(ABin a, LInt *l){
+    if(a){
+        *l = malloc(sizeof(struct lligada));
+        (*l)->valor = a->valor;
+        preorder(a->esq, &(*l)->prox);
+        while(*l) l = &(*l)->prox;
+        preorder(a->dir, l);
+    }
+    else *l = NULL;
+}
+
+//33
+void posorder(ABin a, LInt *l){
+    if(a){
+        posorder(a->esq, l);
+        while(*l) l = &(*l)->prox;
+        posorder(a->dir, l);
+        while(*l) l = &(*l)->prox; // Sim, temos de percorrer até ao final da lista 2 vezes
+        *l = malloc(sizeof(struct lligada));
+        (*l)->valor = a->valor;
+        (*l)->prox = NULL; // Necessário
+    }
+    else *l = NULL;
+}
+
+//34
+//TODO
+int depth(ABin a, int x){
+    if(!a) return -1; // nao encontrou
+
+    if(a->valor == x) return 1; // encontrou
+
+    int esq = depth(a->esq,x);
+    int dir = depth(a->dir,x);
+
+    if(esq == -1 && dir == -1) return -1; // nao encontrou nos dois ramos
+    if(esq == -1) return 1 + dir; // encontrou no direito
+    if(dir == -1) return 1 + esq; // encontrou no esquerdo
+    return esq < dir ? 1 + esq : 1 + dir; //retorna o menor + 1;
+}
+
+//35
+int freeAB(ABin a){
+    if(!a) return 0;
+    int nodosLibertados = 1 + freeAB(a->esq) + freeAB(a->dir);
+    free(a);
+    return nodosLibertados;
+}
+
+//36
+//TODO
+int pruneAB (ABin *a, int l) {
+    if(!(*a)) return 0;
+    int nodosLibertados;
+    if(l == 0){
+        nodosLibertados = 1 + pruneAB(&(*a)->esq, 0) + pruneAB(&(*a)->dir, 0);
+        free(*a);
+        (*a) = NULL; // POR ALGUMA RAZÃO ISTO É NECESSÁRIO??
+        return nodosLibertados;
+    }
+    return 0 + pruneAB(&(*a)->esq, l-1) + pruneAB(&(*a)->dir, l-1);
+}
+
+//37
+int iguaisAB(ABin a, ABin b){
+    if(!a && !b) return 1;
+    if(!a && b || a && !b) return 0;
+    return (a->valor == b->valor && iguaisAB(a->esq,b->esq) && iguaisAB(a->dir,b->dir));
+}
+
+//38
+//TODO
+LInt concat(LInt a, LInt b) {
+    if(!a) return b;
+    LInt temp = a;
+    while(temp->prox) temp = temp->prox; // vamos até ao final da lista para...
+    temp->prox = b; // ... acrescentar o b no final
+    return a; // a cabeca da lista
+}
+
+LInt nivelL(ABin a, int n){
+    if(!a || n < 1) return NULL;
+    if(n == 1){
+        LInt new = malloc(sizeof(struct lligada));
+        new->valor = a->valor;
+        new->prox = NULL;
+        return new;
+    }
+    else return concat(nivelL(a->esq,n - 1),nivelL(a->dir,n - 1));
+} 
+
+//39
+//TODO
+int nivelV(ABin a, int n, int v[]) {
+    if(!a || n < 1) return 0;
+    if(n == 1) {
+        *v = a->valor;
+        return 1;
+    }
+    else {
+        int e = nivelV(a->esq,n - 1,v); // 'e' são os elementos à esquerda
+        int d = nivelV(a->dir,n - 1,v+e); // 'd' são os elementos à direita
+        return e + d;
+    }
+}
+
+//40
+//TODO
+int dumpAbin(ABin a, int v[], int N){
+    int r = 0;
+    if (a && N > 0)
+    {
+        r = dumpAbin(a->esq, v, N - 1);
+        v[r] = a->valor;
+        r++;
+        r += dumpAbin(a->dir, v + r, N - r);
+    }
+    return r;
+}
+
 
 int main(){
     int n = 440;
