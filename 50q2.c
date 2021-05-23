@@ -611,8 +611,7 @@ int nivelV(ABin a, int n, int v[]) {
 //TODO
 int dumpAbin(ABin a, int v[], int N){
     int r = 0;
-    if (a && N > 0)
-    {
+    if (a && N > 0){
         r = dumpAbin(a->esq, v, N - 1);
         v[r] = a->valor;
         r++;
@@ -621,6 +620,140 @@ int dumpAbin(ABin a, int v[], int N){
     return r;
 }
 
+//41
+//TODO
+ABin somasAcA(ABin a){
+    if(!a) return NULL;
+    // criamos uma nova árvore recursivamente
+    ABin new = malloc(sizeof(struct nodo));
+    new->esq = somasAcA(a->esq);
+    new->dir = somasAcA(a->dir);
+    //o valor da arvore vai ser a soma do valor desta
+    //com o valor das folhas, se estas existirem
+    new->valor = a->valor + (new->esq ? new->esq->valor : 0) + (new->dir ? new->dir->valor : 0);
+    return new;
+}
+
+//42
+//TODO
+int contaFolhas(ABin a){
+    if(!a) return 0;
+    if(a) if(!a->esq && !a->dir) return 1;
+    return contaFolhas(a->esq) + contaFolhas(a->dir);
+}
+
+//43
+ABin cloneMirror(ABin a) {
+    if(!a) return NULL;
+    ABin temp = a->esq;
+    ABin b = malloc(sizeof(struct nodo));
+    b->valor = a->valor;
+    b->esq = cloneMirror(a->dir);
+    b->dir = cloneMirror(temp);
+    return (b);
+}
+
+//44
+//TODO
+int addOrd (ABin *a, int x) {
+    while(*a) {
+        if((*a)->valor == x) return 1;
+        if((*a)->valor > x) a = &((*a)->esq); // se x for menor, apontamos para a arvore da esquerda
+        else a = &((*a)->dir); // senão apontamos para a da direita
+    }
+    // quando chegarmos à arvore a colocar o elemento
+    // criamos uma nova arvore e colocamos lá o x
+    ABin new = malloc(sizeof(struct nodo));
+    new->valor = x;
+    new->esq = new->dir = NULL;
+    (*a) = new; // em vez de apontar para NULL aponta para a nova arvore
+    return 0;
+}
+
+//45
+//não é a melhor maneira de fazer isto, mas funciona...
+int lookupAB(ABin a, int x){
+    if(!a) return 0;
+    if(a->valor == x) return 1;
+    else return MAX(lookupAB(a->esq, x), lookupAB(a->dir, x));
+}
+
+//46
+//TODO
+int depthOrd(ABin a, int x){
+    if(!a) return -1;
+    if(a->valor == x) return 1;
+    int d = depthOrd((a->valor < x ? a->dir : a->esq),x);
+    // se a procura encontrar alguma coisa retorna 1 + o resultado, 
+    // senão retorna -1.
+    return d == -1 ? d : 1 + d;
+}
+
+//47
+int maiorAB(ABin a){
+    int maior = a->valor;
+    while(a){ // se andarmos sempre para a direita acabamos por encontrar o maior nodo
+        maior = a->valor;
+        a = a->dir;
+    }
+    return maior;
+}
+
+//48
+//TODO
+void removeMaiorA(ABin *a){
+    // percorrer todos os nodos até ao maior:
+    while((*a)->dir) a = &(*a)->dir;
+    // temos de passar o apontador para um nodo válido
+    // ou ficamos com u "0" no nodo, de acordo com o codeboard...
+    // por isso dizemos que o apontador aponta para o da esquerda que nao foi eliminado
+    ABin temp = *a;
+    free(*a);
+    *a = temp->esq;
+}
+
+//49
+int quantosMaiores(ABin a, int x){
+    if(!a) return 0;
+    if(a->valor > x) return 1 + quantosMaiores(a->esq, x) + quantosMaiores(a->dir, x);
+    return 0 + quantosMaiores(a->esq, x) + quantosMaiores(a->dir, x);
+}
+
+//50
+//TODO
+void listToBTree (LInt l, ABin *a) {
+    if(!l) return;
+    ABin new = malloc(sizeof(struct nodo));
+    int meio = length(l) / 2;
+    LInt temp = l, prev = NULL;
+    int i;
+    for(i = 0; i < meio; i++) {
+        prev = temp;
+        temp = temp->prox;
+    }
+    new->valor = temp->valor;
+    new->esq = new->dir = NULL;
+    if(prev) prev->prox = NULL;
+    
+    if(l != temp) listToBTree(l,&(new->esq));
+    if(temp->prox) listToBTree(temp->prox,&(new->dir));
+    (*a) = new;
+}
+
+//51
+//TODO
+int deProcuraAux(ABin a, int x, int maior) {
+    if(!a) return 1;
+    if((maior && a->valor < x) || (!maior && a->valor > x)) return 0;
+    return deProcuraAux(a->esq,x,maior) && deProcuraAux(a->dir,x,maior);
+}
+
+int deProcura (ABin a) {
+    if(!a) return 1;
+    int b = deProcuraAux(a->esq,a->valor, 0) && deProcura(a->esq);
+    int c = deProcuraAux(a->dir,a->valor, 1) && deProcura(a->dir);
+    return b && c;
+}
 
 int main(){
     int n = 440;
